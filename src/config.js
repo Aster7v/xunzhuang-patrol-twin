@@ -15,6 +15,9 @@ export const CONFIG = {
   // ROS map (m, rad) -> Three world. Calibrate against the real map before live use.
   transform: { scale: 1, originX: 0, originZ: 0, rotation: 0 },
   websocketUrl: '',
+  // The organizer's file URL and large JSON persistence were unreliable in live
+  // verification. Native screens use a small config with a hosted model URL.
+  platformModelUrl: encodeURI('https://raw.githubusercontent.com/Aster7v/xunzhuang-patrol-twin/main/platform/巡桩问诊-日间场景.glb'),
 };
 
 export function createConfig(options = {}) {

@@ -19,13 +19,26 @@ export async function exportPlatformAssets(config) {
       line.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), direction.normalize()); route.add(line);
     }
     world.robotLabel.visible = false;
+    // The organizer's upload gateway may cap requests at 1 MiB. Share identical
+    // geometry and omit unused UVs without requiring Draco or external decoders.
+    const geometryCache = new Map();
+    world.group.traverse(node => {
+      const geometry = node.geometry;
+      if (!geometry) return;
+      geometry.deleteAttribute('uv');
+      const signature = JSON.stringify([
+        geometry.index ? Array.from(geometry.index.array) : null,
+        Object.keys(geometry.attributes).sort().map(key => [key, geometry.attributes[key].itemSize, Array.from(geometry.attributes[key].array)]),
+      ]);
+      const shared = geometryCache.get(signature);
+      if (shared) node.geometry = shared;
+      else geometryCache.set(signature, geometry);
+    });
     const exporter = new GLTFExporter();
     const data = await exporter.parseAsync(world.group, { binary: true, onlyVisible: true });
-    const bytes = new Uint8Array(data);
-    let base64;
-    if (typeof Buffer !== 'undefined') base64 = Buffer.from(bytes).toString('base64');
-    else { let string = ''; for (let i = 0; i < bytes.length; i += 8192) string += String.fromCharCode(...bytes.subarray(i, i + 8192)); base64 = btoa(string); }
-    const screen = makePlatformConfig(`data:model/gltf-binary;base64,${base64}`, config);
+    const reference = new URL(config.platformModelUrl);
+    if (!['https:', 'http:'].includes(reference.protocol)) throw new Error('platformModelUrl 需要可访问的 HTTP(S) 模型地址');
+    const screen = makePlatformConfig(reference.href, config);
     return { glb: data, screen };
   } finally {
     for (const geometry of world.geometries) geometry.dispose();
