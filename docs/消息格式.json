@@ -1,0 +1,11 @@
+{
+  "说明": "仅为标准化接口示例，不代表实际设备已接入。timestamp 请替换成真实采集时间。mapId/robotId 必须与模块配置一致。",
+  "messages": [
+    { "type": "task", "robotId": "FISHBOT-01", "mapId": "demo-parking-v1", "timestamp": "2026-11-16T12:00:00.000Z", "payload": { "taskId": "TASK-001", "stage": "navigating", "pointId": "CP-01", "progress": 0.1, "completed": 0, "elapsed": 3.2 } },
+    { "type": "pose", "robotId": "FISHBOT-01", "mapId": "demo-parking-v1", "timestamp": "2026-11-16T12:00:01.000Z", "payload": { "frameId": "map", "x": -6.0, "y": -0.3, "yaw": 1.57 } },
+    { "type": "sensor", "robotId": "FISHBOT-01", "mapId": "demo-parking-v1", "timestamp": "2026-11-16T12:00:02.000Z", "payload": { "taskId": "TASK-001", "pointId": "CP-01", "temperature": 33.4, "gasRaw": 286 } },
+    { "type": "status", "robotId": "FISHBOT-01", "mapId": "demo-parking-v1", "timestamp": "2026-11-16T12:00:03.000Z", "payload": { "battery": 88 } },
+    { "type": "alert", "robotId": "FISHBOT-01", "mapId": "demo-parking-v1", "timestamp": "2026-11-16T12:00:04.000Z", "payload": { "id": "EVENT-001", "pointId": "CP-03", "message": "03 号充电桩目标表面温度偏高", "temperature": 63.5 } },
+    { "type": "image", "robotId": "FISHBOT-01", "mapId": "demo-parking-v1", "timestamp": "2026-11-16T12:00:05.000Z", "payload": { "pointId": "CP-01", "url": "/inspection-images/TASK-001-CP-01.jpg" } }
+  ]
+}

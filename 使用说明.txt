@@ -1,0 +1,49 @@
+巡桩问诊 · 日间优化版 V1.1（2026-11-17）
+
+一、主交付：组委会网页编辑器
+你只有网页编辑权限，因此优先使用 platform/ 里的 GLB 和大屏 JSON。
+在新建测试大屏中选择“导入/导出 → 导入 JSON”，导入配置后保存、退出、重新打开。
+JSON 已内嵌模型；若内嵌模型不能保存，在模型字段云端上传本包 GLB。
+不要覆盖已有大屏，不要把 HTML 当模型上传。详细步骤在 platform/导入步骤.txt。
+
+二、能力边界
+公开编辑器支持 GLB/GLTF/FBX 上传和 JSON 导入。
+模型组件没有发现内部节点位姿绑定或动作播放，完整巡检动作不会随 GLB 导入。
+原生交付覆盖静态示意模型与信息卡；真实数据需平台数据源绑定。
+完整运动联动需要组委会开放相应能力。目前尚未完成账号内导入、保存、复开与设备联调。
+没有修改组委会网站、阿里云服务或已有部署。
+
+三、独立日间演示
+交付文件中的“巡桩问诊-日间优化版.html”用于辅助查看日间观感和动态流程。
+新版 Chrome / Edge 开启硬件加速后，直接双击打开，无须 npm 或联网。
+开始巡检 → 四点依次采集 → CP-03 模拟温度异常 → 返回待命区。
+支持暂停、取消、复位、相机切换、设备聚焦、日志、记录与 JSON 导出。
+新增“平台导出”，可生成不含模拟读数的原生大屏 JSON 或静态 GLB。
+场景、采样、阈值和图像仍明确标为示意。MQ-135 原始响应不伪装为准确浓度。
+
+四、源码运行
+在本说明目录运行 python -m http.server 8090
+浏览器访问 http://localhost:8090/
+源码使用 ES Module/importmap，不可直接双击 index.html。依赖均在 vendor/。
+
+五、代码组织
+src/world.js：独立预览和 GLB 共用几何，避免两套场景脱节。
+src/scene.js：日间渲染、相机和交互。
+styles.css + theme-day.css：原布局与日间样式。
+src/sim.js：独立仿真；src/bridge.js：独立版应用数据适配。
+src/platform-config.js：原生大屏结构；src/export-platform.js：GLB 和 JSON 导出。
+src/config.js：示意点位、模拟值、坐标、阈值。
+
+六、审美 skill 和参考
+使用 Anthropic frontend-design skill，原文与许可在 design-skills/frontend-design/。
+研究了 OpenEVSE digital twin、ROS2 Web Viewer 和 SPTMS；来源和版本见设计记录。
+没有找到可认定为完全相同、且能直接导入此平台的成品。
+
+七、打包
+python tools/package.py --esbuild esbuild可执行文件路径
+打包工具使用独立 esbuild，不需要 npm；运行者只需浏览器。
+也可在离线页“平台导出”中重新生成 GLB/JSON。
+
+八、验证
+详见 docs/验证记录.md。当前环境没有浏览器工具，未完成截图、GPU 与交互实测。
+实际平台导入、保存复开、数据绑定和机器人运动仍需验证。
